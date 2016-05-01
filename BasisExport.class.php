@@ -11,6 +11,8 @@
  *
 */
 
+date_default_timezone_set('America/New_York');
+
 class BasisExport
 {
     // Basis login details
@@ -90,16 +92,20 @@ class BasisExport
             throw new Exception('ERROR: Unable to login! Check your username and password.');
             return false;
         } else {
-            parse_str($m[1], $cookies);
-            if (empty($cookies['access_token'])) {
-                throw new Exception('ERROR: Unable to get an access token!');
-                return false;
-            } else {
-                $this->access_token = $cookies['access_token'];
-                if ($this->debug) {
-                    echo 'access_token cookie: ' . $this->access_token . "\n";
-                }
+            parse_str($m[2], $cookies);
+            $this->access_token = $cookies['access_token'];
+            if ($this->debug) {
+                echo 'access_token cookie: ' . $this->access_token . "\n";
             }
+            // if (empty($cookies['access_token'])) {
+            //     throw new Exception('ERROR: Unable to get an access token!');
+            //     return false;
+            // } else {
+            //     $this->access_token = $cookies['access_token'];
+            //     if ($this->debug) {
+            //         echo 'access_token cookie: ' . $this->access_token . "\n";
+            //     }
+            // }
         }
 
     } // doLogin()
@@ -336,8 +342,8 @@ class BasisExport
             fputcsv($fp, array(
                 'start time', 'start time ISO', 'start time timezone', 'start time offset',
                 'end time', 'end time ISO', 'end time timezone', 'end time offset',
-                'light mins', 'deep mins', 'rem mins', 'interruption mins', 'unknown mins', 'interruptions', 
-                'toss turns', 'type', 'actual seconds', 'calories', 'heart rate avg', 'heart rate min', 
+                'light mins', 'deep mins', 'rem mins', 'interruption mins', 'unknown mins', 'interruptions',
+                'toss turns', 'type', 'actual seconds', 'calories', 'heart rate avg', 'heart rate min',
                 'heart rate max', 'state', 'version', 'id'
                 )
             );
@@ -347,16 +353,16 @@ class BasisExport
                 $start_time = strftime("%Y-%m-%d %H:%M:%S", $sleep[$i]['start_time']);
                 $end_time = strftime("%Y-%m-%d %H:%M:%S", $sleep[$i]['end_time']);
                 $row = array(
-                    $start_time, $sleep[$i]['start_time_iso'], $sleep[$i]['start_time_timezone'], 
-                    $sleep[$i]['start_time_offset'], $end_time, $sleep[$i]['end_time_iso'], 
+                    $start_time, $sleep[$i]['start_time_iso'], $sleep[$i]['start_time_timezone'],
+                    $sleep[$i]['start_time_offset'], $end_time, $sleep[$i]['end_time_iso'],
                     $sleep[$i]['end_time_timezone'], $sleep[$i]['end_time_offset'],
-                    $sleep[$i]['light_minutes'], $sleep[$i]['deep_minutes'], $sleep[$i]['rem_minutes'], 
+                    $sleep[$i]['light_minutes'], $sleep[$i]['deep_minutes'], $sleep[$i]['rem_minutes'],
                     $sleep[$i]['interruption_minutes'], $sleep[$i]['unknown_minutes'],
-                    $sleep[$i]['interruptions'], $sleep[$i]['toss_and_turn'], $sleep[$i]['type'], 
-                    $sleep[$i]['actual_seconds'], $sleep[$i]['calories'], $sleep[$i]['heart_rate_avg'], 
-                    $sleep[$i]['heart_rate_min'], $sleep[$i]['heart_rate_max'], 
+                    $sleep[$i]['interruptions'], $sleep[$i]['toss_and_turn'], $sleep[$i]['type'],
+                    $sleep[$i]['actual_seconds'], $sleep[$i]['calories'], $sleep[$i]['heart_rate_avg'],
+                    $sleep[$i]['heart_rate_min'], $sleep[$i]['heart_rate_max'],
                     $sleep[$i]['state'], $sleep[$i]['version'], $sleep[$i]['id']
-                    
+
                 );
 
                 // Add row to csv file
@@ -495,11 +501,11 @@ class BasisExport
                 $start_time = strftime("%Y-%m-%d %H:%M:%S", $activities[$i]['start_time']);
                 $end_time = strftime("%Y-%m-%d %H:%M:%S", $activities[$i]['end_time']);
                 $row = array(
-                    $start_time, $activities[$i]['start_time_iso'], $activities[$i]['start_time_timezone'], 
-                    $activities[$i]['start_time_offset'], $end_time, $activities[$i]['end_time_iso'], 
+                    $start_time, $activities[$i]['start_time_iso'], $activities[$i]['start_time_timezone'],
+                    $activities[$i]['start_time_offset'], $end_time, $activities[$i]['end_time_iso'],
                     $activities[$i]['end_time_timezone'], $activities[$i]['end_time_offset'],
                     $activities[$i]['type'], $activities[$i]['actual_seconds'], $activities[$i]['steps'],
-                    $activities[$i]['calories'], $activities[$i]['minutes'], $activities[$i]['heart_rate_avg'], 
+                    $activities[$i]['calories'], $activities[$i]['minutes'], $activities[$i]['heart_rate_avg'],
                     $activities[$i]['heart_rate_min'], $activities[$i]['heart_rate_max'], $activities[$i]['state'],
                     $activities[$i]['version'], $activities[$i]['id']
                 );
